@@ -1,0 +1,14 @@
+# Dependency Review Workflow
+# This workflow highlights dependency changes in PRs
+
+name: "Dependency Review"
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/dependency-review-action@v4
