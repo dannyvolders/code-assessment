@@ -1,0 +1,24 @@
+# .NET Format & Lint Workflow
+# This workflow checks code formatting and style using dotnet format
+
+name: ".NET Format & Lint"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Restore dependencies
+        run: dotnet restore ./src/src.sln
+      - name: Check formatting
+        run: dotnet format --verify-no-changes ./src/src.sln

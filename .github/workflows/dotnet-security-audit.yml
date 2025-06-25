@@ -1,0 +1,24 @@
+# .NET Security Audit Workflow
+# This workflow checks for known vulnerabilities in dependencies
+
+name: ".NET Security Audit"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  security-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Restore dependencies
+        run: dotnet restore ./src/src.sln
+      - name: Audit dependencies
+        run: dotnet list ./src/src.sln package --vulnerable

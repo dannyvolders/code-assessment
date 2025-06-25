@@ -1,0 +1,31 @@
+# .NET Test Coverage Workflow
+# This workflow collects and reports code coverage using coverlet
+
+name: ".NET Test Coverage"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Restore dependencies
+        run: dotnet restore ./src/src.sln
+      - name: Build
+        run: dotnet build --no-restore --configuration Release ./src/src.sln
+      - name: Test with coverage
+        run: dotnet test --no-build --collect:"XPlat Code Coverage" ./src/src.sln
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./src/**/TestResults/**/*.xml
+          fail_ci_if_error: false
